@@ -6,15 +6,19 @@ The code is pretty bad, there is no error checking at all, it's using an uncompl
 
 I will not put any more effort than this since it'd be better spent in making hyprland have support for dynamic title out of the box.
 
-### Compiling and usage
+### Usage
 
-Clone the repo then build with
+Download the latest release [here](https://github.com/morr0ne/pipfloat/releases/latest/download/pipfloat), simply copy it to your PATH and add it to your hyprland config like so:
+```
+exec-once = pipfloat
+```
+
+### Compiling
+
+If for some reason you want to compile it yourself simply install the rust compiler, clone the repo and run
 
 ```bash
 cargo build --release
 ```
 
-The resulting binary can be found at `target/release/pipfloat`, simply copy it to your PATH and add it to your hyprland config like so:
-```
-exec-once = pipfloat
-```
+The resulting binary can be found at `target/release/pipfloat`
