@@ -11,17 +11,22 @@ fn main() -> hyprland::Result<()> {
     println!("Started watching for windows");
 
     event_listener.add_window_title_change_handler(|address| {
-        if let Some(client) = Clients::get()
-            .unwrap()
-            .find(|client| client.address.to_string() == format!("0x{address}"))
-        {
+        if let Ok(Some(client)) = Clients::get().map(|mut clients| {
+            clients.find(|client| client.address.to_string() == format!("0x{address}"))
+        }) {
             if client.title == "Picture-in-Picture" && !client.floating {
-                let _ = Dispatch::call(DispatchType::ToggleFloating(Some(
+                let dispatch_result = Dispatch::call(DispatchType::ToggleFloating(Some(
                     WindowIdentifier::Title("Picture-in-Picture"),
                 )));
 
-                println!("Floated window")
+                if dispatch_result.is_err() {
+                    eprintln!("Failed to float window")
+                } else {
+                    println!("Floated window")
+                }
             }
+        } else {
+            eprintln!("Failed to read clients")
         }
     });
 
