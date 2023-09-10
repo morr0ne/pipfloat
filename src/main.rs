@@ -16,10 +16,10 @@ fn main() -> hyprland::Result<()> {
             .find(|client| client.address.to_string() == format!("0x{address}"))
         {
             if client.title == "Picture-in-Picture" && !client.floating {
-                Dispatch::call(DispatchType::ToggleFloating(Some(WindowIdentifier::Title(
-                    "Picture-in-Picture",
-                ))))
-                .unwrap();
+                let _ = Dispatch::call(DispatchType::ToggleFloating(Some(
+                    WindowIdentifier::Title("Picture-in-Picture"),
+                )));
+
                 println!("Floated window")
             }
         }
