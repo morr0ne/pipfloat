@@ -1,34 +1,37 @@
-use hyprland::{
-    data::Clients,
-    dispatch::{Dispatch, DispatchType, WindowIdentifier},
-    event_listener::EventListener,
-    shared::HyprData,
-};
+use hyprland_ipc::{params::Window, Dispatcher, Event, EventListener, Result};
+use tokio_stream::StreamExt;
 
-fn main() -> hyprland::Result<()> {
-    let mut event_listener = EventListener::new();
-
+#[tokio::main]
+async fn main() -> Result<()> {
     println!("Started watching for windows");
 
-    event_listener.add_window_title_change_handler(|address| {
-        if let Ok(Some(client)) = Clients::get().map(|mut clients| {
-            clients.find(|client| client.address.to_string() == format!("0x{address}"))
-        }) {
-            if client.title == "Picture-in-Picture" && !client.floating {
-                let dispatch_result = Dispatch::call(DispatchType::ToggleFloating(Some(
-                    WindowIdentifier::Title("Picture-in-Picture"),
-                )));
+    let mut event_listener = EventListener::new().await?;
+    let dispatcher = Dispatcher::new()?;
 
-                if dispatch_result.is_err() {
-                    eprintln!("Failed to float window")
-                } else {
-                    println!("Floated window")
+    while let Some(event) = event_listener.try_next().await? {
+        if let Event::WindowTitle { window_address } = event {
+            let clients = dispatcher.clients().await?;
+
+            if let Some(client) = clients
+                .iter()
+                .find(|client| client.address == format!("0x{window_address}"))
+            {
+                if client.title == "Picture-in-Picture" && !client.floating {
+                    let dispatch_result = dispatcher
+                        .toggle_floating(Some(Window::Address(format!("0x{window_address}"))))
+                        .await;
+
+                    if dispatch_result.is_err() {
+                        eprintln!("Failed to float window")
+                    } else {
+                        println!("Floated window")
+                    }
                 }
+            } else {
+                eprintln!("Failed to find address")
             }
-        } else {
-            eprintln!("Failed to read clients")
         }
-    });
+    }
 
-    event_listener.start_listener()
+    Ok(())
 }
