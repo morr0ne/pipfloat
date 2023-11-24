@@ -21,10 +21,25 @@ async fn main() -> Result<()> {
                         .toggle_floating(Some(Window::Address(format!("0x{window_address}"))))
                         .await;
 
+                    let mut floated = false;
+
                     if dispatch_result.is_err() {
                         eprintln!("Failed to float window")
                     } else {
-                        println!("Floated window")
+                        println!("Floated window");
+                        floated = true;
+                    }
+
+                    if floated {
+                        let dispatch_result = dispatcher
+                            .pin(Some(Window::Address(format!("0x{window_address}"))))
+                            .await;
+
+                        if dispatch_result.is_err() {
+                            eprintln!("Failed to pin window")
+                        } else {
+                            println!("Pinned window");
+                        }
                     }
                 }
             } else {
