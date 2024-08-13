@@ -2,7 +2,7 @@
 name = "pipfloat"
 version = "0.2.0"
 edition = "2021"
-license = "MIT OR Apache-2.0"
+license = "Apache-2.0"
 authors = ["Federico Maria Morrone <contact@morrone.dev>"]
 description = "Terrible code to make firefox pip float"
 repository = "https://github.com/morr0ne/pipfloat"
