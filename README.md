@@ -33,13 +33,9 @@ The resulting binary can be found at `target/release/pipfloat`
 
 ## License
 
-Licensed under either of
-
-- Apache License, Version 2.0, ([LICENSE-APACHE](LICENSE-APACHE) or
-  http://www.apache.org/licenses/LICENSE-2.0)
-- MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
-
-at your option.
+This project is licensed under the
+[Apache-2.0 License](http://www.apache.org/licenses/LICENSE-2.0). For more
+information, please see the [LICENSE](LICENSE) file.
 
 ### Contribution
 
